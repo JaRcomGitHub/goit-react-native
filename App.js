@@ -18,8 +18,8 @@ export default function App() {
   // const [iasReady, setIasReady] = useState(false);
 
   const handlerSwitchLoginRegScr = () => {
+    console.log(isLogin ? "Регистрация" : "Логин");
     setIsLogin(!isLogin);
-    console.log(isLogin);
   }
 
   // if (!iasReady) {

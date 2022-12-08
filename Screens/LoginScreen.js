@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
-  Dimensions,
+  // Dimensions,
 } from "react-native";
 
 const initialState = {
@@ -19,24 +19,24 @@ const initialState = {
 };
 
 export default function LoginScreen({ onSwitch }) {
-  console.log(Platform.OS);
+  // console.log(Platform.OS);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
-  const [dimensions, setdimensions] = useState(
-    Math.round(Dimensions.get("window").width - 20 * 2)
-  );
+  // const [dimensions, setdimensions] = useState(
+  //   Math.round(Dimensions.get("window").width - 20 * 2)
+  // );
 
-  useEffect(() => {
-    const onChange = () => {
-      const width = Math.round(Dimensions.get("window").width - 20 * 2);
+  // useEffect(() => {
+  //   const onChange = () => {
+  //     const width = Math.round(Dimensions.get("window").width - 20 * 2);
 
-      setdimensions(width);
-    };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
+  //     setdimensions(width);
+  //   };
+  //   Dimensions.addEventListener("change", onChange);
+  //   return () => {
+  //     Dimensions.removeEventListener("change", onChange);
+  //   };
+  // }, []);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -57,13 +57,14 @@ export default function LoginScreen({ onSwitch }) {
           source={require("../assets/images/3d-render-tree-landscape-against-night-sky.jpg")}
         >
           <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            // behavior={Platform.OS == "ios" ? "padding" : "height"}
+            behavior={Platform.OS == "ios" && "padding"}
           >
             <View
               style={{
                 ...styles.form,
                 marginBottom: isShowKeyboard ? 20 : 150,
-                width: dimensions,
+                // width: dimensions,
               }}
             >
               <View style={styles.header}>
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     color: "#f0f8ff",
   },
   form: {
-    // marginHorizontal: 40,
+    marginHorizontal: 40,
   },
   inputTitle: {
     color: "#f0f8ff",
