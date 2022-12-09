@@ -1,43 +1,9 @@
-
-import React, { useState } from "react";
-// import React, { useEffect } from "react";
-// import {} from "react-native";
-import LoginScreen from "./Screens/LoginScreen";
-import RegistrationScreen from "./Screens/RegistrationScreen";
-// import * as Font from "expo-font";
-// import AppLoading from 'expo-app-loading';//import { AppLoading } from "expo";
-
-// const loadApplication = async () => {
-//   await Font.loadAsync({
-//     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
-//   });
-// };
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { useRoute } from "./router";
 
 export default function App() {
-  const [isLogin, setIsLogin] = useState(true);
-  // const [iasReady, setIasReady] = useState(false);
+  const routing = useRoute(true);
 
-  const handlerSwitchLoginRegScr = () => {
-    console.log(isLogin ? "Регистрация" : "Логин");
-    setIsLogin(!isLogin);
-  }
-
-  // if (!iasReady) {
-  //   return (
-  //     <AppLoading
-  //       startAsync={loadApplication}
-  //       onFinish={() => setIasReady(true)}
-  //       onError={console.warn}
-  //     />
-  //   );
-  // }
-
-  return (
-    <>
-      {isLogin && <LoginScreen onSwitch={ handlerSwitchLoginRegScr } />}
-      {!isLogin && <RegistrationScreen onSwitch={ handlerSwitchLoginRegScr } />}
-    </>
-  );
+  return <NavigationContainer>{routing}</NavigationContainer>;
 }
-
-

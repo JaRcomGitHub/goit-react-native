@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+// import React, { useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -18,8 +19,9 @@ const initialState = {
   password: "",
 };
 
-export default function LoginScreen({ onSwitch }) {
+export default function LoginScreen({ navigation }) {
   // console.log(Platform.OS);
+  //console.log("navigationL", navigation);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
   // const [dimensions, setdimensions] = useState(
@@ -47,7 +49,7 @@ export default function LoginScreen({ onSwitch }) {
     keyboardHide();
     console.log(state);
     setstate(initialState);
-  }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
@@ -63,7 +65,7 @@ export default function LoginScreen({ onSwitch }) {
             <View
               style={{
                 ...styles.form,
-                marginBottom: isShowKeyboard ? 20 : 150,
+                // marginBottom: isShowKeyboard ? 20 : 150,
                 // width: dimensions,
               }}
             >
@@ -82,7 +84,7 @@ export default function LoginScreen({ onSwitch }) {
                   }
                 />
               </View>
-              <View style={{ marginTop: 15 }}>
+              <View style={{ marginTop: 10 }}>
                 <Text style={styles.inputTitle}>Пароль</Text>
                 <TextInput
                   style={styles.input}
@@ -102,14 +104,25 @@ export default function LoginScreen({ onSwitch }) {
               >
                 <Text style={styles.btnTitle}>Войти</Text>
               </TouchableOpacity>
-              <View style={{ alignItems: "center", marginTop: 10 }}>
-                <Text
-                  style={styles.switchTitle}
-                  onPress={onSwitch}
-                >
+              {/* <View style={{ alignItems: "center", marginTop: 10 }}>
+                <Text style={styles.switchTitle} onPress={onSwitch}>
                   Нет аккаунта? Зарегистрироваться
                 </Text>
-              </View>
+              </View> */}
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Register")}
+                style={{
+                  marginTop: 20,
+                  alignSelf: "center",
+                }}
+              >
+                <Text style={{ color: "#ffffff" }}>
+                  Нет аккаунта?{" "}
+                  <Text style={{ fontSize: 18, color: "#ff6347" }}>
+                    Зарегистрироваться
+                  </Text>
+                </Text>
+              </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>
@@ -126,8 +139,8 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     resizeMode: "cover",
-    justifyContent: "flex-end",
-    alignItems: "center",
+    justifyContent: "center",
+    // alignItems: "center",
   },
   input: {
     borderWidth: 1,
@@ -142,7 +155,7 @@ const styles = StyleSheet.create({
   },
   inputTitle: {
     color: "#f0f8ff",
-    marginBottom: 10,
+    marginBottom: 5,
     fontSize: 18,
     fontFamily: "Roboto",
   },
@@ -172,7 +185,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    marginBottom: 50,
+    marginBottom: 30,
   },
   headerTitle: {
     fontSize: 40,
@@ -185,4 +198,3 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
   },
 });
-
