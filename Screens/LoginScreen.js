@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   Text,
@@ -13,6 +13,7 @@ import {
   TouchableWithoutFeedback,
   // Dimensions,
 } from "react-native";
+import { logIn, selectIsAuth } from "../src/redux/authSlice";
 
 const initialState = {
   email: "",
@@ -20,10 +21,13 @@ const initialState = {
 };
 
 export default function LoginScreen({ navigation }) {
-  // console.log(Platform.OS);
-  //console.log("navigationL", navigation);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
+  const isAuth = useSelector(selectIsAuth);
+  const dispatch = useDispatch();
+
+  console.log("Login isAuth:", isAuth);
+
   // const [dimensions, setdimensions] = useState(
   //   Math.round(Dimensions.get("window").width - 20 * 2)
   // );
@@ -48,6 +52,7 @@ export default function LoginScreen({ navigation }) {
   const handlerOnSubmit = () => {
     keyboardHide();
     console.log(state);
+    dispatch(logIn(state));
     setstate(initialState);
   };
 
@@ -110,7 +115,7 @@ export default function LoginScreen({ navigation }) {
                 </Text>
               </View> */}
               <TouchableOpacity
-                onPress={() => navigation.navigate("Register")}
+                onPress={() => navigation.navigate("Registration")}
                 style={{
                   marginTop: 20,
                   alignSelf: "center",

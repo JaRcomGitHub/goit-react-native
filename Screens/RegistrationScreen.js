@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   StyleSheet,
   Text,
@@ -13,6 +13,7 @@ import {
   TouchableWithoutFeedback,
   // Dimensions,
 } from "react-native";
+import { regIn, selectIsAuth } from "../src/redux/authSlice";
 
 const initialState = {
   login: "",
@@ -21,10 +22,13 @@ const initialState = {
 };
 
 export default function RegistrationScreen({ navigation }) {
-  //   console.log(Platform.OS);
-  //console.log("navigationR", navigation);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
+  const isAuth = useSelector(selectIsAuth);
+  const dispatch = useDispatch();
+
+  console.log("Regis isAuth:", isAuth);
+
   // const [dimensions, setdimensions] = useState(
   //   Math.round(Dimensions.get("window").width - 20 * 2)
   // );
@@ -49,6 +53,7 @@ export default function RegistrationScreen({ navigation }) {
   const handlerOnSubmit = () => {
     keyboardHide();
     console.log(state);
+    dispatch(regIn(state));
     setstate(initialState);
   };
 

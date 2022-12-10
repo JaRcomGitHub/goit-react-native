@@ -1,19 +1,30 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
+// import { Button } from "react-native";
+import { logOut, selectIsAuth } from "./src/redux/authSlice";
 
 import LoginScreen from "./Screens/LoginScreen";
 import RegistrationScreen from "./Screens/RegistrationScreen";
+import HomeScreen from "./Screens/HomeScreen";
 import PostsScreen from "./Screens/PostsScreen";
 import CreatePostsScreen from "./Screens/CreatePostsScreen";
+import CommentsScreen from "./Screens/CommentsScreen";
+import MapScreen from "./Screens/MapScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 
 const AuthStack = createStackNavigator();
+const MainStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
 
-export const useRoute = (isAuth) => {
+const UseRoute = () => {
+  const isAuth = useSelector(selectIsAuth);
+  const dispatch = useDispatch();
+
+  console.log("Route isAuth:", isAuth);
+
   if (!isAuth) {
     return (
       <AuthStack.Navigator>
@@ -28,27 +39,79 @@ export const useRoute = (isAuth) => {
           options={{
             headerShown: false,
           }}
-          name="Register"
+          name="Registration"
           component={RegistrationScreen}
         />
       </AuthStack.Navigator>
     );
   }
   return (
+    <MainStack.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        headerTitleAlign: "center",
+      }}
+    >
+      <MainStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: "Публикации",
+          headerRight: () => (
+            <Feather
+              name="log-out"
+              size={24}
+              color="#aaa"
+              style={{ marginRight: 15 }}
+              //   onPress={() => alert("This is a button!")}
+              onPress={() => dispatch(logOut())}
+            />
+          ),
+        }}
+      />
+      <MainStack.Screen name="Posts" component={PostsScreen} />
+      <MainStack.Screen name="CreatePosts" component={CreatePostsScreen} />
+      <MainStack.Screen name="Comments" component={CommentsScreen} />
+      <MainStack.Screen name="Map" component={MapScreen} />
+      <MainStack.Screen name="Profile" component={ProfileScreen} />
+    </MainStack.Navigator>
+  );
+
+  return (
     <MainTab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
-        headerShown: false,
+        headerShown: true,
         // title: "Login Name",
+        headerStyle: {
+          backgroundColor: "#f4511e",
+        },
+        headerTintColor: "#ccc",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+        headerTitleAlign: "center",
+        // tabBarLabelStyle: { paddingBottom: 3 },
       }}
     >
       <MainTab.Screen
         options={{
           tabBarIcon: ({ focused, size, color }) => (
-            <MaterialCommunityIcons
-              name="postage-stamp"
-              size={size}
-              color={color}
+            <Feather name="grid" size={size} color={color} />
+          ),
+          title: "Публикации",
+          headerRight: () => (
+            // <Button
+            //   onPress={() => alert("This is a button!")}
+            //   title="Info"
+            //   color="#fff"
+            //   />
+            <Feather
+              name="log-out"
+              size={24}
+              color="black"
+              style={{ marginRight: 15 }}
+              onPress={() => alert("This is a button!")}
             />
           ),
         }}
@@ -58,7 +121,16 @@ export const useRoute = (isAuth) => {
       <MainTab.Screen
         options={{
           tabBarIcon: ({ focused, size, color }) => (
-            <AntDesign name="pluscircleo" size={35} color={color} />
+            <Feather name="plus" size={size} color={color} />
+          ),
+          title: "Создать публикацию",
+          headerLeft: () => (
+            <Feather
+              name="arrow-left"
+              size={24}
+              color="black"
+              style={{ marginLeft: 15 }}
+            />
           ),
         }}
         name="Create"
@@ -67,8 +139,9 @@ export const useRoute = (isAuth) => {
       <MainTab.Screen
         options={{
           tabBarIcon: ({ focused, size, color }) => (
-            <AntDesign name="profile" size={size} color={color} />
+            <Feather name="user" size={size} color={color} />
           ),
+          title: "Профиль",
         }}
         name="Profile"
         component={ProfileScreen}
@@ -76,3 +149,5 @@ export const useRoute = (isAuth) => {
     </MainTab.Navigator>
   );
 };
+
+export default UseRoute;
