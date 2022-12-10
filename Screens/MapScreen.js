@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const MapScreen = () => {
+const MapScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text>MapScreen</Text>

@@ -8,26 +8,9 @@ const HomeScreen = ({ navigation }) => {
 
   console.log("Home isAuth:", isAuth);
 
-  if (!isAuth) {
-    // navigation.navigate("Login");
-  }
-
   return (
     <View style={styles.container}>
       <Text>HomeScreen</Text>
-      {/* {login && <Text>login: {login}</Text>}
-      {email && <Text>email: {email}</Text>}
-      {password && <Text>password: {password}</Text>} */}
-      <Text
-        onPress={() =>
-          navigation.navigate("Home", {
-            screen: "Posts",
-            params: { userId: "e2ee4" },
-          })
-        }
-      >
-        TEST
-      </Text>
       <Text onPress={() => navigation.navigate("Posts")}>go to Posts</Text>
       <Text onPress={() => navigation.navigate("CreatePosts")}>
         go to CreatePosts

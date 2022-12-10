@@ -8,7 +8,7 @@ import { logOut, selectIsAuth } from "./src/redux/authSlice";
 
 import LoginScreen from "./Screens/LoginScreen";
 import RegistrationScreen from "./Screens/RegistrationScreen";
-import HomeScreen from "./Screens/HomeScreen";
+// import HomeScreen from "./Screens/HomeScreen";
 import PostsScreen from "./Screens/PostsScreen";
 import CreatePostsScreen from "./Screens/CreatePostsScreen";
 import CommentsScreen from "./Screens/CommentsScreen";
@@ -16,8 +16,28 @@ import MapScreen from "./Screens/MapScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 
 const AuthStack = createStackNavigator();
-const MainStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
+const CreatePostsStack = createStackNavigator();
+
+function CreatePostsStackScreen() {
+  return (
+    <CreatePostsStack.Navigator
+      screenOptions={{
+        headerTitleAlign: "center",
+      }}
+    >
+      <CreatePostsStack.Screen
+        name="CreatePost"
+        component={CreatePostsScreen}
+        options={{
+          title: "Создать публикацию",
+        }}
+      />
+      <CreatePostsStack.Screen name="Comments" component={CommentsScreen} />
+      <CreatePostsStack.Screen name="Map" component={MapScreen} />
+    </CreatePostsStack.Navigator>
+  );
+}
 
 const UseRoute = () => {
   const isAuth = useSelector(selectIsAuth);
@@ -45,53 +65,22 @@ const UseRoute = () => {
       </AuthStack.Navigator>
     );
   }
-  return (
-    <MainStack.Navigator
-      initialRouteName="Home"
-      screenOptions={{
-        headerTitleAlign: "center",
-      }}
-    >
-      <MainStack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          title: "Публикации",
-          headerRight: () => (
-            <Feather
-              name="log-out"
-              size={24}
-              color="#aaa"
-              style={{ marginRight: 15 }}
-              //   onPress={() => alert("This is a button!")}
-              onPress={() => dispatch(logOut())}
-            />
-          ),
-        }}
-      />
-      <MainStack.Screen name="Posts" component={PostsScreen} />
-      <MainStack.Screen name="CreatePosts" component={CreatePostsScreen} />
-      <MainStack.Screen name="Comments" component={CommentsScreen} />
-      <MainStack.Screen name="Map" component={MapScreen} />
-      <MainStack.Screen name="Profile" component={ProfileScreen} />
-    </MainStack.Navigator>
-  );
-
+  //Home:
   return (
     <MainTab.Navigator
       screenOptions={{
-        tabBarShowLabel: false,
-        headerShown: true,
-        // title: "Login Name",
+        tabBarShowLabel: true,
+        // headerShown: true,
         headerStyle: {
-          backgroundColor: "#f4511e",
+          backgroundColor: "#fff",
         },
-        headerTintColor: "#ccc",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
+        // headerTintColor: "#ccc",
+        // headerTitleStyle: {
+        //   fontWeight: "bold",
+        // },
         headerTitleAlign: "center",
-        // tabBarLabelStyle: { paddingBottom: 3 },
+        // tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: "#4169e1",
       }}
     >
       <MainTab.Screen
@@ -101,19 +90,15 @@ const UseRoute = () => {
           ),
           title: "Публикации",
           headerRight: () => (
-            // <Button
-            //   onPress={() => alert("This is a button!")}
-            //   title="Info"
-            //   color="#fff"
-            //   />
             <Feather
               name="log-out"
               size={24}
-              color="black"
+              color="#aaa"
               style={{ marginRight: 15 }}
-              onPress={() => alert("This is a button!")}
+              onPress={() => dispatch(logOut())}
             />
           ),
+          showIcon: "false",
         }}
         name="Posts"
         component={PostsScreen}
@@ -123,18 +108,10 @@ const UseRoute = () => {
           tabBarIcon: ({ focused, size, color }) => (
             <Feather name="plus" size={size} color={color} />
           ),
-          title: "Создать публикацию",
-          headerLeft: () => (
-            <Feather
-              name="arrow-left"
-              size={24}
-              color="black"
-              style={{ marginLeft: 15 }}
-            />
-          ),
+          headerShown: false,
         }}
-        name="Create"
-        component={CreatePostsScreen}
+        name="CreatePosts"
+        component={CreatePostsStackScreen}
       />
       <MainTab.Screen
         options={{
@@ -146,6 +123,20 @@ const UseRoute = () => {
         name="Profile"
         component={ProfileScreen}
       />
+      {/* <MainTab.Screen
+        name="Comments"
+        component={CommentsScreen}
+        options={{
+          tabBarIcon: ({ focused, size, color }) => (
+            <Feather name="user" size={size} color={color} />
+          ),
+          title: "Комментарии",
+          tabBarInactiveTintColor: "gray",
+          tabBarActiveTintColor: "tomato",
+          tabBarBadge: 3,
+        }}
+      />
+      <MainTab.Screen name="Map" component={MapScreen} /> */}
     </MainTab.Navigator>
   );
 };

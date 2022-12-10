@@ -5,14 +5,19 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
-const CreatePostsScreen = () => {
+const CreatePostsScreen = ({ navigation }) => {
   const size = 24;
   const color = "black";
   return (
     <View style={styles.container}>
       <Text>CreatePostsScreen</Text>
 
-      <Feather name="grid" size={size} color={color} />
+      <Text onPress={() => navigation.navigate("Comments")}>
+        go to Comments
+      </Text>
+      <Text onPress={() => navigation.navigate("Map")}>go to Map</Text>
+
+      {/* <Feather name="grid" size={size} color={color} />
       <Feather
         name="log-out"
         size={24}
@@ -32,7 +37,7 @@ const CreatePostsScreen = () => {
 
       <SimpleLineIcons name="location-pin" size={24} color="black" />
       <MaterialIcons name="photo-camera" size={24} color="black" />
-      <AntDesign name="like2" size={24} color="black" />
+      <AntDesign name="like2" size={24} color="black" /> */}
     </View>
   );
 };
