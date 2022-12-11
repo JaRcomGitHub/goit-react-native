@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 // import { Button } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { logOut, selectIsAuth } from "./src/redux/authSlice";
 
 import LoginScreen from "./Screens/LoginScreen";
@@ -15,11 +16,69 @@ import CommentsScreen from "./Screens/CommentsScreen";
 import MapScreen from "./Screens/MapScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 
+// const MainStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
 const CreatePostsStack = createStackNavigator();
+const PostsStack = createStackNavigator();
 
-function CreatePostsStackScreen() {
+// function MainStackScreen() {
+//   return (
+//     <MainStack.Navigator
+//       screenOptions={{
+//         headerShown: false,
+//       }}
+//     >
+//       <MainStack.Screen name="Home" component={MainTabHomeScreen} />
+//       <MainStack.Screen
+//         name="CreatePostOnly"
+//         component={CreatePostsStackScreen}
+//       />
+//     </MainStack.Navigator>
+//   );
+// }
+
+// function CreateScreen({ navigation }) {
+//   // const [isCreate, setIsCreate] = useState(true);
+//   console.log("test0");
+//   useEffect(() => {
+//     console.log("test1");
+//     navigation.navigate("CreatePostOnly");
+//     return () => {
+//       console.log("test2");
+//       navigation.navigate("MainTabHomeScreen");
+//     };
+//   }, []);
+
+//   return (
+//     <View style={styles.container}>
+//       <Text>CreateScreen</Text>
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+// });
+
+function AuthStackScreen() {
+  return (
+    <AuthStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <AuthStack.Screen name="Login" component={LoginScreen} />
+      <AuthStack.Screen name="Registration" component={RegistrationScreen} />
+    </AuthStack.Navigator>
+  );
+}
+
+function CreatePostsStackScreen({ navigation }) {
   return (
     <CreatePostsStack.Navigator
       screenOptions={{
@@ -27,67 +86,35 @@ function CreatePostsStackScreen() {
       }}
     >
       <CreatePostsStack.Screen
-        name="CreatePost"
+        name="CreatePosts"
         component={CreatePostsScreen}
         options={{
           title: "Создать публикацию",
         }}
       />
-      <CreatePostsStack.Screen name="Comments" component={CommentsScreen} />
-      <CreatePostsStack.Screen name="Map" component={MapScreen} />
+      <CreatePostsStack.Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          title: "Карта",
+        }}
+      />
     </CreatePostsStack.Navigator>
   );
 }
 
-const UseRoute = () => {
-  const isAuth = useSelector(selectIsAuth);
+function PostsStackScreen() {
   const dispatch = useDispatch();
-
-  console.log("Route isAuth:", isAuth);
-
-  if (!isAuth) {
-    return (
-      <AuthStack.Navigator>
-        <AuthStack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="Login"
-          component={LoginScreen}
-        />
-        <AuthStack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="Registration"
-          component={RegistrationScreen}
-        />
-      </AuthStack.Navigator>
-    );
-  }
-  //Home:
   return (
-    <MainTab.Navigator
+    <PostsStack.Navigator
       screenOptions={{
-        tabBarShowLabel: true,
-        // headerShown: true,
-        headerStyle: {
-          backgroundColor: "#fff",
-        },
-        // headerTintColor: "#ccc",
-        // headerTitleStyle: {
-        //   fontWeight: "bold",
-        // },
         headerTitleAlign: "center",
-        // tabBarInactiveTintColor: "gray",
-        tabBarActiveTintColor: "#4169e1",
       }}
     >
-      <MainTab.Screen
+      <PostsStack.Screen
+        name="Posts"
+        component={PostsScreen}
         options={{
-          tabBarIcon: ({ focused, size, color }) => (
-            <Feather name="grid" size={size} color={color} />
-          ),
           title: "Публикации",
           headerRight: () => (
             <Feather
@@ -98,47 +125,91 @@ const UseRoute = () => {
               onPress={() => dispatch(logOut())}
             />
           ),
-          showIcon: "false",
         }}
-        name="Posts"
-        component={PostsScreen}
+      />
+      <PostsStack.Screen
+        name="Comments"
+        component={CommentsScreen}
+        options={{
+          title: "Комментарии",
+        }}
+      />
+      <PostsStack.Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          title: "Карта",
+        }}
+      />
+    </PostsStack.Navigator>
+  );
+}
+
+function MainTabHomeScreen() {
+  return (
+    <MainTab.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+        headerStyle: {
+          backgroundColor: "#fff",
+        },
+        headerTitleAlign: "center",
+        tabBarActiveTintColor: "#4169e1",
+        tabBarStyle: { position: "absolute" },
+      }}
+    >
+      <MainTab.Screen
+        name="PostsStack"
+        component={PostsStackScreen}
+        options={{
+          tabBarIcon: ({ focused, size, color }) => (
+            <Feather name="grid" size={size} color={color} />
+          ),
+          title: "Публикации",
+          headerShown: false,
+        }}
       />
       <MainTab.Screen
+        name="CreatePostsStack"
+        component={CreatePostsStackScreen}
+        // component={CreateScreen}
         options={{
           tabBarIcon: ({ focused, size, color }) => (
             <Feather name="plus" size={size} color={color} />
           ),
+          title: "Создать публикацию",
           headerShown: false,
         }}
-        name="CreatePosts"
-        component={CreatePostsStackScreen}
       />
       <MainTab.Screen
+        name="Profile"
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused, size, color }) => (
             <Feather name="user" size={size} color={color} />
           ),
           title: "Профиль",
-        }}
-        name="Profile"
-        component={ProfileScreen}
-      />
-      {/* <MainTab.Screen
-        name="Comments"
-        component={CommentsScreen}
-        options={{
-          tabBarIcon: ({ focused, size, color }) => (
-            <Feather name="user" size={size} color={color} />
-          ),
-          title: "Комментарии",
-          tabBarInactiveTintColor: "gray",
-          tabBarActiveTintColor: "tomato",
-          tabBarBadge: 3,
+          headerShown: false,
         }}
       />
-      <MainTab.Screen name="Map" component={MapScreen} /> */}
     </MainTab.Navigator>
   );
+}
+
+const UseRoute = () => {
+  const isAuth = useSelector(selectIsAuth);
+
+  console.log("Route isAuth:", isAuth);
+
+  if (!isAuth) {
+    return <AuthStackScreen />;
+  }
+
+  // return <CreatePostsStackScreen />;
+
+  return <MainTabHomeScreen />;
+
+  // return <MainStackScreen />;
 };
 
 export default UseRoute;
