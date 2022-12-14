@@ -12,21 +12,12 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 // import { useSelector } from "react-redux";
 // import { selectEmail, selectLogin } from "../src/redux/authSlice";
 
-// const initialState = {
-//   posts: [],
-//   uriPhoto: "",
-//   title: "",
-//   place: "",
-// location.coords.latitude: "",
-// location.coords.longitude: "",
-// };
-
 const PostsScreen = ({ navigation, route }) => {
   // const name = useSelector(selectLogin);
   // const email = useSelector(selectEmail);
   const [posts, setPosts] = useState([]);
 
-  console.log("route.params", route.params);
+  // console.log("route.params", route.params);
 
   useEffect(() => {
     if (route.params) {
@@ -67,7 +58,7 @@ const PostsScreen = ({ navigation, route }) => {
                 marginHorizontal: 20,
               }}
             >
-              <Text>{item.info.title}</Text>
+              <Text style={styles.nameText}>{item.info.title}</Text>
             </View>
             <View
               style={{
@@ -78,24 +69,27 @@ const PostsScreen = ({ navigation, route }) => {
                 marginTop: 5,
               }}
             >
-              <TouchableOpacity onPress={() => navigation.navigate("Comments")}>
-                <Text>
-                  <Feather name="message-circle" size={24} color="black" />
-                  Comments
-                </Text>
+              <TouchableOpacity
+                style={styles.touchableBtn}
+                onPress={() => navigation.navigate("Comments")}
+              >
+                <Feather name="message-circle" size={24} color="black" />
+                <Text style={styles.touchableText}>Comments</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                style={styles.touchableBtn}
                 onPress={() => {
                   const location = item.location;
                   navigation.navigate("Map", { location });
                 }}
               >
-                <Text>
-                  <SimpleLineIcons
-                    name="location-pin"
-                    size={24}
-                    color="black"
-                  />
+                <SimpleLineIcons name="location-pin" size={24} color="black" />
+                <Text
+                  style={{
+                    ...styles.touchableText,
+                    textDecorationLines: "underline",
+                  }}
+                >
                   {item.info.place}
                 </Text>
               </TouchableOpacity>
@@ -111,8 +105,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    // alignItems: "center",
     marginBottom: 50,
+  },
+  nameText: {
+    fontWeight: "bold",
+    fontSize: 16,
+    fontFamily: "Roboto",
+  },
+  touchableBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  touchableText: {
+    fontSize: 16,
+    fontFamily: "Roboto",
   },
 });
 

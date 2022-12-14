@@ -3,16 +3,13 @@ import { View, StyleSheet, Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 const MapScreen = ({ route }) => {
-  const [location, setLocation] = useState({});
+  const [location, setLocation] = useState(null);
 
   useEffect(() => {
     if (route.params) {
       setLocation(route.params.location);
     }
   }, [route.params]);
-
-  if (location)
-    console.log("Map location", location.latitude, location.longitude);
 
   if (!location) {
     return (
@@ -21,6 +18,10 @@ const MapScreen = ({ route }) => {
       </View>
     );
   }
+  // else {
+  //   console.log("Map location", location.latitude, location.longitude);
+  // }
+
   return (
     <View style={styles.container}>
       <MapView

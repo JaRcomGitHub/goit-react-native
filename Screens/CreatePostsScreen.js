@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,8 @@ import {
 } from "react-native";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
-import { Feather } from "@expo/vector-icons";
+import * as MediaLibrary from "expo-media-library";
+// import { Feather } from "@expo/vector-icons";
 // import { SimpleLineIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -20,61 +21,64 @@ const initialInfo = {
 
 const CreatePostsScreen = ({ navigation }) => {
   const [info, setInfo] = useState(initialInfo);
-  const [camera, setCamera] = useState(null);
+  const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [location, setLocation] = useState(null);
   // const size = 24;
   // const color = "black";
   // const [hasPermission, setHasPermission] = useState(null);
-  const [hasPermission, setHasPermission] = Camera.useCameraPermissions();
-  // let location = await Location.getCurrentPositionAsync({});
-  // const coords = {
-  //   latitude: location.coords.latitude,
-  //   longitude: location.coords.longitude,
-  // };
-  // setLocation(coords);
+  // const [hasPermission, setHasPermission] = Camera.useCameraPermissions();
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
+      await MediaLibrary.requestPermissionsAsync();
+      // setHasPermission(status === "granted");
+      if (status !== "granted") {
+        console.log("Permission to access Camera was denied");
+      }
     })();
 
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       // setHasPermission2(status === "granted");
       if (status !== "granted") {
-        console.log("Permission to access location was denied");
+        console.log("Permission to access Location was denied");
       }
     })();
   }, []);
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  // if (hasPermission === null) {
+  //   return <View />;
+  // }
+  // if (hasPermission === false) {
+  //   return <Text>No access to camera</Text>;
+  // }
 
   const takePhoto = async () => {
-    const photo = await camera.takePictureAsync();
-    const photoLocation = await Location.getCurrentPositionAsync();
-    setPhoto(photo.uri);
-    setLocation(photoLocation.coords);
-    // console.log("photo", photo);
-    // console.log("latitude", photoLocation.coords.latitude);
-    // console.log("longitude", photoLocation.coords.longitude);
+    if (cameraRef) {
+      const photo = await cameraRef.takePictureAsync();
+      const photoLocation = await Location.getCurrentPositionAsync();
+      setPhoto(photo.uri);
+      setLocation(photoLocation.coords);
+      // console.log("photo", photo);
+    }
   };
 
   const sendPhoto = () => {
-    console.log("navigation", navigation);
+    // console.log("navigation", navigation);
     navigation.navigate("Posts", { photo, location, info });
-    //Добавить отправку названия и координат
+    setInfo(initialInfo);
   };
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} ref={setCamera}>
+      <Camera
+        style={styles.camera}
+        ref={(ref) => {
+          setCameraRef(ref);
+        }}
+      >
         {photo && (
           <View style={styles.takePhotoContainer}>
             <Image
@@ -123,11 +127,11 @@ const CreatePostsScreen = ({ navigation }) => {
           <Text style={styles.sendLabel}>Опубликовать</Text>
         </TouchableOpacity>
       </View>
-      <View style={{ marginTop: 5, alignItems: "center" }}>
+      {/* <View style={{ marginTop: 5, alignItems: "center" }}>
         <TouchableOpacity style={styles.deleteBtn}>
           <Feather name="trash-2" size={24} color="black" />
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };
