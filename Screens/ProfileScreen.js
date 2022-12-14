@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { logOut, selectEmail, selectLogin } from "../src/redux/authSlice";
+// import { AntDesign } from "@expo/vector-icons";
 
 const ProfileScreen = ({ navigation }) => {
   const name = useSelector(selectLogin);
@@ -23,6 +24,7 @@ const ProfileScreen = ({ navigation }) => {
         onPress={() => dispatch(logOut())}
       />
       <Text>Posts:</Text>
+      {/* <AntDesign name="like2" size={24} color="black" /> */}
     </View>
   );
 };

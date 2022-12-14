@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import { Camera } from "expo-camera";
 import * as Location from "expo-location";
 import { Feather } from "@expo/vector-icons";
-import { SimpleLineIcons } from "@expo/vector-icons";
+// import { SimpleLineIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const initialState = {
+const initialInfo = {
   title: "",
   place: "",
 };
 
 const CreatePostsScreen = ({ navigation }) => {
-  const [state, setstate] = useState(initialState);
+  const [info, setInfo] = useState(initialInfo);
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState(null);
-  // const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState(null);
   // const size = 24;
   // const color = "black";
   // const [hasPermission, setHasPermission] = useState(null);
@@ -51,16 +58,17 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
-    const location = await Location.getCurrentPositionAsync();
-    console.log("latitude", location.coords.latitude);
-    console.log("longitude", location.coords.longitude);
+    const photoLocation = await Location.getCurrentPositionAsync();
     setPhoto(photo.uri);
-    console.log("photo", photo);
+    setLocation(photoLocation.coords);
+    // console.log("photo", photo);
+    // console.log("latitude", photoLocation.coords.latitude);
+    // console.log("longitude", photoLocation.coords.longitude);
   };
 
   const sendPhoto = () => {
     console.log("navigation", navigation);
-    navigation.navigate("Posts", { photo });
+    navigation.navigate("Posts", { photo, location, info });
     //Добавить отправку названия и координат
   };
 
@@ -81,43 +89,44 @@ const CreatePostsScreen = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </Camera>
-      <View>
-        <Text style={styles.inputTitle}>Название</Text>
+      <View style={{ marginTop: 5 }}>
         <TextInput
           style={styles.input}
-          textAlign={"center"}
+          textAlign={"left"}
           // onFocus={() => setIsShowKeyboard(true)}
-          value={state.title}
+          placeholder="Название..."
+          value={info.title}
           onChangeText={(value) =>
-            setstate((prevState) => ({ ...prevState, title: value }))
+            setInfo((prevState) => ({ ...prevState, title: value }))
           }
         />
       </View>
-      <View style={{ marginTop: 10 }}>
-        <Text style={styles.inputTitle}>Местность</Text>
+      <View style={{ marginTop: 5 }}>
         <TextInput
           style={styles.input}
-          textAlign={"center"}
+          textAlign={"left"}
           // onFocus={() => setIsShowKeyboard(true)}
-          value={state.place}
+          placeholder="Местность..."
+          value={info.place}
           onChangeText={(value) =>
-            setstate((prevState) => ({ ...prevState, place: value }))
+            setInfo((prevState) => ({ ...prevState, place: value }))
           }
         />
       </View>
-      <View style={{ marginLeft: 30 }}>
-        <Text onPress={() => navigation.navigate("Map")}>
+      {/* <View>
+        <Text onPress={() => navigation.navigate("Map", { location })}>
           <SimpleLineIcons name="location-pin" size={24} color="black" />
-          Map
         </Text>
-      </View>
-      <View>
+      </View> */}
+      <View style={{ marginTop: 5 }}>
         <TouchableOpacity onPress={sendPhoto} style={styles.sendBtn}>
-          <Text style={styles.sendLabel}>SEND</Text>
+          <Text style={styles.sendLabel}>Опубликовать</Text>
         </TouchableOpacity>
       </View>
-      <View style={{ alignItems: "center" }}>
-        <Feather name="trash-2" size={24} color="black" />
+      <View style={{ marginTop: 5, alignItems: "center" }}>
+        <TouchableOpacity style={styles.deleteBtn}>
+          <Feather name="trash-2" size={24} color="black" />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -126,12 +135,12 @@ const CreatePostsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 50,
   },
   camera: {
     height: "70%",
     // marginHorizontal: 2,
     // marginTop: 40,
-    marginBottom: 5,
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "flex-end",
@@ -154,18 +163,18 @@ const styles = StyleSheet.create({
   },
   takePhotoContainer: {
     position: "absolute",
-    top: 50,
+    top: 20,
     left: 10,
     borderColor: "#fff",
     borderWidth: 1,
     borderRadius: 10,
   },
   sendBtn: {
-    marginHorizontal: 30,
+    marginHorizontal: 20,
     height: 40,
     borderWidth: 2,
     borderColor: "#4169e1",
-    borderRadius: 10,
+    borderRadius: 50,
     marginTop: 5,
     marginBottom: 5,
     justifyContent: "center",
@@ -174,12 +183,24 @@ const styles = StyleSheet.create({
   sendLabel: {
     color: "#4169e1",
     fontSize: 20,
+    fontFamily: "Roboto",
   },
-  inputTitle: {
-    color: "#f0f8ff",
-    marginBottom: 5,
+  input: {
+    marginHorizontal: 20,
+    padding: 1,
+    borderBottomWidth: 1,
+    borderColor: "#778899",
+    // height: 30,
+    // color: "#4169e1",
     fontSize: 18,
     fontFamily: "Roboto",
+  },
+  deleteBtn: {
+    padding: 5,
+    width: 70,
+    borderRadius: 50,
+    backgroundColor: "#d3d3d3",
+    alignItems: "center",
   },
 });
 
