@@ -18,9 +18,6 @@ const MapScreen = ({ route }) => {
       </View>
     );
   }
-  // else {
-  //   console.log("Map location", location.latitude, location.longitude);
-  // }
 
   return (
     <View style={styles.container}>

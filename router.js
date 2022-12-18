@@ -1,69 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
-// import { Button } from "react-native";
-import { View, Text, StyleSheet } from "react-native";
 import { logOut, selectIsAuth } from "./src/redux/authSlice";
 
 import LoginScreen from "./Screens/LoginScreen";
 import RegistrationScreen from "./Screens/RegistrationScreen";
-// import HomeScreen from "./Screens/HomeScreen";
 import PostsScreen from "./Screens/PostsScreen";
 import CreatePostsScreen from "./Screens/CreatePostsScreen";
 import CommentsScreen from "./Screens/CommentsScreen";
 import MapScreen from "./Screens/MapScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
 
-// const MainStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
 const CreatePostsStack = createStackNavigator();
 const PostsStack = createStackNavigator();
-
-// function MainStackScreen() {
-//   return (
-//     <MainStack.Navigator
-//       screenOptions={{
-//         headerShown: false,
-//       }}
-//     >
-//       <MainStack.Screen name="Home" component={MainTabHomeScreen} />
-//       <MainStack.Screen
-//         name="CreatePostOnly"
-//         component={CreatePostsStackScreen}
-//       />
-//     </MainStack.Navigator>
-//   );
-// }
-
-// function CreateScreen({ navigation }) {
-//   // const [isCreate, setIsCreate] = useState(true);
-//   console.log("test0");
-//   useEffect(() => {
-//     console.log("test1");
-//     navigation.navigate("CreatePostOnly");
-//     return () => {
-//       console.log("test2");
-//       navigation.navigate("MainTabHomeScreen");
-//     };
-//   }, []);
-
-//   return (
-//     <View style={styles.container}>
-//       <Text>CreateScreen</Text>
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-// });
 
 function AuthStackScreen() {
   return (
@@ -198,18 +151,16 @@ function MainTabHomeScreen() {
 
 const UseRoute = () => {
   const isAuth = useSelector(selectIsAuth);
+  // const dispatch = useDispatch();
 
-  console.log("Route isAuth:", isAuth);
+  // useEffect(() => {
+  //   dispatch(authStateCahngeUser());
+  // }, [isAuth]);
 
   if (!isAuth) {
     return <AuthStackScreen />;
   }
-
-  // return <CreatePostsStackScreen />;
-
   return <MainTabHomeScreen />;
-
-  // return <MainStackScreen />;
 };
 
 export default UseRoute;
