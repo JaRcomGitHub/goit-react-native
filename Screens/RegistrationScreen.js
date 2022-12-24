@@ -13,7 +13,7 @@ import {
   TouchableWithoutFeedback,
   // Dimensions,
 } from "react-native";
-import { authSignUpUser, regIn, selectIsAuth } from "../src/redux/authSlice";
+import { authSignUpUser, selectIsAuth } from "../src/redux/authSlice";
 
 const initialState = {
   login: "",

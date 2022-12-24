@@ -3,12 +3,7 @@ import { useDispatch } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
-import {
-  authSignOutUser,
-  authStateChangeUser,
-  logOut,
-  selectIsAuth,
-} from "./src/redux/authSlice";
+import { authSignOutUser } from "./src/redux/authSlice";
 
 import LoginScreen from "./Screens/LoginScreen";
 import RegistrationScreen from "./Screens/RegistrationScreen";

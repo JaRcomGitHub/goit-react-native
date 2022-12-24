@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import {
-  logOut,
   selectEmail,
   selectLogin,
   authSignOutUser,
