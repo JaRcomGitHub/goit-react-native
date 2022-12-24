@@ -13,7 +13,7 @@ import {
   TouchableWithoutFeedback,
   // Dimensions,
 } from "react-native";
-import { logIn, selectIsAuth } from "../src/redux/authSlice";
+import { authSignInUser, logIn, selectIsAuth } from "../src/redux/authSlice";
 
 const initialState = {
   email: "",
@@ -26,7 +26,7 @@ export default function LoginScreen({ navigation }) {
   const isAuth = useSelector(selectIsAuth);
   const dispatch = useDispatch();
 
-  console.log("Login isAuth:", isAuth);
+  // console.log("Login isAuth:", isAuth);
 
   // const [dimensions, setdimensions] = useState(
   //   Math.round(Dimensions.get("window").width - 20 * 2)
@@ -51,8 +51,9 @@ export default function LoginScreen({ navigation }) {
 
   const handlerOnSubmit = () => {
     keyboardHide();
-    console.log(state);
-    dispatch(logIn(state));
+    //console.log(state);
+    // dispatch(logIn(state));
+    dispatch(authSignInUser(state));
     setstate(initialState);
   };
 

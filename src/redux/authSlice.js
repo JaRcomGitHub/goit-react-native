@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import db from "../firebase/config";
+import { useSelector } from "react-redux";
+import db from "../firebase/config";
 
 const initialAuthState = {
   login: "",
@@ -7,9 +8,9 @@ const initialAuthState = {
   password: "",
   isAuth: false,
 
-  userId: null,
-  nickName: null,
-  stateChange: false,
+  uid: null,
+  // nickName: null,
+  // stateChange: false,
 };
 
 export const authSlice = createSlice({
@@ -39,16 +40,17 @@ export const authSlice = createSlice({
       state.password = "";
       state.isAuth = false;
     },
-    // updateUserProfile: (state, { payload }) => ({
-    //   ...state,
-    //   userId: payload.userId,
-    //   nickName: payload.nickName,
-    // }),
-    // authStateChange: (state, { payload }) => ({
-    //   ...state,
-    //   stateChange: payload.stateChange,
-    // }),
-    // authSignOut: () => state,
+    updateUserProfile: (state, { payload }) => ({
+      ...state,
+      uid: payload.uid,
+      login: payload.login,
+      email: payload.email,
+    }),
+    authStateChange: (state, { payload }) => ({
+      ...state,
+      isAuth: payload.isAuth,
+    }),
+    authSignOut: () => state,
   },
 });
 
@@ -57,67 +59,84 @@ export const selectIsAuth = (store) => store.auth.isAuth;
 export const selectLogin = (store) => store.auth.login;
 export const selectEmail = (store) => store.auth.email;
 
-// const { updateUserProfile, authStateChange, authSignOut } = authSlice.actions;
+const { updateUserProfile, authStateChange, authSignOut } = authSlice.actions;
 
-// export const authSignUpUser =
-//   ({ email, password, nickname }) =>
-//   async (dispatch, getState) => {
-//     try {
-//       await db.auth().createUserWithEmailAndPassword(email, password);
+export const authSignUpUser =
+  ({ login, email, password }) =>
+  async (dispatch, getState) => {
+    try {
+      const { user } = await db
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
 
-//       const user = await db.auth().currentUser;
+      console.log("userUp", user);
 
-//       // if (user) {
-//       await user.updateProfile({
-//         displayName: nickname,
-//         // displayName: "Bob",
-//         // photoURL: "https://example.com.jpg",
-//       });
-//       // }
+      // const user = await db.auth().currentUser;
+      if (user) {
+        await user.updateProfile({
+          displayName: login,
+          //photoURL: "https://example.com.jpg",
+        });
 
-//       const { displayName, uid } = await db.auth().currentUser;
+        const userUpdateProfile = {
+          uid: user.uid,
+          login: user.displayName,
+          email: user.email,
+        };
 
-//       const userUpdateProfile = {
-//         nickName: displayName,
-//         userId: uid,
-//       };
+        dispatch(updateUserProfile(userUpdateProfile));
+        dispatch(authStateChange({ isAuth: true }));
+      }
+    } catch (error) {
+      console.log("error", error);
+      console.log("error.code", error.code);
+      console.log("error.message", error.message);
+    }
+  };
 
-//       dispatch(updateUserProfile(userUpdateProfile));
-//     } catch (error) {
-//       console.log("error", error);
+export const authSignInUser =
+  ({ email, password }) =>
+  async (dispatch, getState) => {
+    try {
+      const { user } = await db
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+      console.log("userIN", user);
+      console.log(user.email);
+      if (user) {
+        const userUpdateProfile = {
+          uid: user.uid,
+          login: user.displayName,
+          email: user.email,
+        };
+        dispatch(updateUserProfile(userUpdateProfile));
+        dispatch(authStateChange({ isAuth: true }));
+      }
+    } catch (error) {
+      console.log("error", error);
+      console.log("error.code", error.code);
+      console.log("error.message", error.message);
+    }
+  };
 
-//       console.log("error.message", error.message);
-//     }
-//   };
+export const authSignOutUser = () => async (dispatch, getState) => {
+  await db.auth().signOut();
+  // dispatch(authSignOut());
+  dispatch(authStateChange({ isAuth: false }));
+};
 
-// export const authSignInUser =
-//   ({ email, password }) =>
-//   async (dispatch, getState) => {
-//     try {
-//       const user = await db.auth().signInWithEmailAndPassword(email, password);
-//       console.log("user", user);
-//     } catch (error) {
-//       console.log("error", error);
-//       console.log("error.code", error.code);
-//       console.log("error.message", error.message);
-//     }
-//   };
+export const authStateChangeUser = () => async (dispatch, getState) => {
+  await db.auth().onAuthStateChanged((user) => {
+    console.log("authStateChangeUser", user);
+    if (user) {
+      const userUpdateProfile = {
+        uid: user.uid,
+        login: user.displayName,
+        email: user.email,
+      };
 
-// export const authSignOutUser = () => async (dispatch, getState) => {
-//   await db.auth().signOut();
-//   dispatch(authSignOut());
-// };
-
-// export const authStateCahngeUser = () => async (dispatch, getState) => {
-//   await db.auth().onAuthStateChanged((user) => {
-//     if (user) {
-//       const userUpdateProfile = {
-//         nickName: user.displayName,
-//         userId: user.uid,
-//       };
-
-//       dispatch(authStateChange({ stateChange: true }));
-//       dispatch(updateUserProfile(userUpdateProfile));
-//     }
-//   });
-// };
+      dispatch(authStateChange({ isAuth: true }));
+      dispatch(updateUserProfile(userUpdateProfile));
+    }
+  });
+};

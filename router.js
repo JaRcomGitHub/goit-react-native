@@ -1,9 +1,14 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
-import { logOut, selectIsAuth } from "./src/redux/authSlice";
+import {
+  authSignOutUser,
+  authStateChangeUser,
+  logOut,
+  selectIsAuth,
+} from "./src/redux/authSlice";
 
 import LoginScreen from "./Screens/LoginScreen";
 import RegistrationScreen from "./Screens/RegistrationScreen";
@@ -75,7 +80,7 @@ function PostsStackScreen() {
               size={24}
               color="#aaa"
               style={{ marginRight: 15 }}
-              onPress={() => dispatch(logOut())}
+              onPress={() => dispatch(authSignOutUser())}
             />
           ),
         }}
@@ -149,18 +154,11 @@ function MainTabHomeScreen() {
   );
 }
 
-const UseRoute = () => {
-  const isAuth = useSelector(selectIsAuth);
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(authStateCahngeUser());
-  // }, [isAuth]);
-
+const useRoute = (isAuth) => {
   if (!isAuth) {
     return <AuthStackScreen />;
   }
   return <MainTabHomeScreen />;
 };
 
-export default UseRoute;
+export default useRoute;

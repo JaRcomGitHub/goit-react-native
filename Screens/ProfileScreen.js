@@ -2,7 +2,12 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { View, Text, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { logOut, selectEmail, selectLogin } from "../src/redux/authSlice";
+import {
+  logOut,
+  selectEmail,
+  selectLogin,
+  authSignOutUser,
+} from "../src/redux/authSlice";
 // import { AntDesign } from "@expo/vector-icons";
 
 const ProfileScreen = ({ navigation }) => {
@@ -21,7 +26,7 @@ const ProfileScreen = ({ navigation }) => {
         size={24}
         color="#aaa"
         style={{ marginRight: 15 }}
-        onPress={() => dispatch(logOut())}
+        onPress={() => dispatch(authSignOutUser())}
       />
       <Text>Posts:</Text>
       {/* <AntDesign name="like2" size={24} color="black" /> */}
