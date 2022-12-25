@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -15,13 +16,6 @@ import * as MediaLibrary from "expo-media-library";
 import { MaterialIcons } from "@expo/vector-icons";
 import db from "../src/firebase/config";
 import { nanoid } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
 
 const initialInfo = {
   title: "",
@@ -85,27 +79,26 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const uploadPostToServer = async () => {
     const photo = await uploadPhotoToServer();
-    // console.log("photo111", photo);
-    // const createPost = await db
-    //   .firestore()
-    //   .collection("posts")
-    //   .add({ photo, info, location, uid, login });
-    // console.log("createPost", createPost);
+    console.log("photo111", photo);
+    const createPost = await db
+      .firestore()
+      .collection("posts")
+      .add({ photo, info, location, uid, login });
+    console.log("createPost", createPost);
   };
 
   const uploadPhotoToServer = async () => {
     const response = await fetch(photo);
     const file = await response.blob();
     const uniquePostId = Date.now().toString() + "_" + nanoid();
-    const temp = await db.storage().ref(`postImage/${uniquePostId}`).put(file);
-    console.log("temp", temp);
-
-    // const processedPhoto = await db
-    //   .storage()
-    //   .ref("postImage")
-    //   .child(uniquePostId)
-    //   .getDownloadURL();
-    // return processedPhoto;
+    const data = await db.storage().ref(`postImage/${uniquePostId}`).put(file);
+    console.log("data", data);
+    const processedPhoto = await db
+      .storage()
+      .ref("postImage")
+      .child(uniquePostId)
+      .getDownloadURL();
+    return processedPhoto;
   };
 
   return (
