@@ -1,16 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
 import db from "../firebase/config";
 
 const initialAuthState = {
+  uid: null,
   login: "",
   email: "",
-  password: "",
   isAuth: false,
-
-  uid: null,
-  // nickName: null,
-  // stateChange: false,
+  // password: "",
 };
 
 export const authSlice = createSlice({
@@ -50,10 +46,10 @@ export const authSlice = createSlice({
       ...state,
       isAuth: payload.isAuth,
     }),
-    // authSignOut: () => state,
-    authSignOut(state, _) {
-      state.isAuth = false;
-    },
+    authSignOut: () => initialAuthState,
+    // authSignOut(state, _) {
+    //   state.isAuth = false;
+    // },
   },
 });
 

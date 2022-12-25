@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,15 @@ import * as MediaLibrary from "expo-media-library";
 // import { Feather } from "@expo/vector-icons";
 // import { SimpleLineIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import db from "../src/firebase/config";
+import { nanoid } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
 const initialInfo = {
   title: "",
@@ -28,6 +37,8 @@ const CreatePostsScreen = ({ navigation }) => {
   // const color = "black";
   // const [hasPermission, setHasPermission] = useState(null);
   // const [hasPermission, setHasPermission] = Camera.useCameraPermissions();
+
+  const { uid, login } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
@@ -66,9 +77,35 @@ const CreatePostsScreen = ({ navigation }) => {
   };
 
   const sendPhoto = () => {
+    uploadPostToServer();
     // console.log("navigation", navigation);
-    navigation.navigate("Posts", { photo, location, info });
-    setInfo(initialInfo);
+    // navigation.navigate("Posts", { photo, location, info });
+    // setInfo(initialInfo);
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+    // console.log("photo111", photo);
+    // const createPost = await db
+    //   .firestore()
+    //   .collection("posts")
+    //   .add({ photo, info, location, uid, login });
+    // console.log("createPost", createPost);
+  };
+
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(photo);
+    const file = await response.blob();
+    const uniquePostId = Date.now().toString() + "_" + nanoid();
+    const temp = await db.storage().ref(`postImage/${uniquePostId}`).put(file);
+    console.log("temp", temp);
+
+    // const processedPhoto = await db
+    //   .storage()
+    //   .ref("postImage")
+    //   .child(uniquePostId)
+    //   .getDownloadURL();
+    // return processedPhoto;
   };
 
   return (

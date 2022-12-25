@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   Text,
@@ -13,7 +13,7 @@ import {
   TouchableWithoutFeedback,
   // Dimensions,
 } from "react-native";
-import { authSignInUser, selectIsAuth } from "../src/redux/authSlice";
+import { authSignInUser } from "../src/redux/authSlice";
 
 const initialState = {
   email: "",
@@ -23,7 +23,7 @@ const initialState = {
 export default function LoginScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
-  const isAuth = useSelector(selectIsAuth);
+  // const isAuth = useSelector(selectIsAuth);
   const dispatch = useDispatch();
 
   // console.log("Login isAuth:", isAuth);
