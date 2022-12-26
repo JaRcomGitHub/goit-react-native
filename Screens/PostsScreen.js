@@ -26,7 +26,6 @@ const PostsScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    console.log("d");
     getAllPost();
   }, []);
 
@@ -78,7 +77,9 @@ const PostsScreen = ({ navigation, route }) => {
             >
               <TouchableOpacity
                 style={styles.touchableBtn}
-                onPress={() => navigation.navigate("Comments")}
+                onPress={() =>
+                  navigation.navigate("Comments", { postId: item.id })
+                }
               >
                 <Feather name="message-circle" size={24} color="black" />
                 <Text style={styles.touchableText}>Comments</Text>
