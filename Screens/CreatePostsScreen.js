@@ -72,9 +72,9 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const sendPhoto = () => {
     uploadPostToServer();
-    // console.log("navigation", navigation);
-    // navigation.navigate("Posts", { photo, location, info });
-    // setInfo(initialInfo);
+    console.log("navigation", navigation);
+    navigation.navigate("Posts", { photo, location, info });
+    setInfo(initialInfo);
   };
 
   const uploadPostToServer = async () => {

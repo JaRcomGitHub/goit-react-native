@@ -9,30 +9,37 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
-// import { useSelector } from "react-redux";
-// import { selectEmail, selectLogin } from "../src/redux/authSlice";
+import db from "../src/firebase/config";
 
 const PostsScreen = ({ navigation, route }) => {
-  // const name = useSelector(selectLogin);
-  // const email = useSelector(selectEmail);
   const [posts, setPosts] = useState([]);
 
   // console.log("route.params", route.params);
 
+  const getAllPost = async () => {
+    await db
+      .firestore()
+      .collection("posts")
+      .onSnapshot((data) =>
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
+  };
+
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
+    console.log("d");
+    getAllPost();
+  }, []);
+
+  // useEffect(() => {
+  //   if (route.params) {
+  //     setPosts((prevState) => [...prevState, route.params]);
+  //   }
+  // }, [route.params]);
 
   console.log("posts", posts);
 
   return (
     <View style={styles.container}>
-      {/* <Text>User Photo</Text>
-      <Text>{name}</Text>
-      <Text>{email}</Text> */}
-
       <FlatList
         data={posts}
         keyExtractor={(item, indx) => indx.toString()}
