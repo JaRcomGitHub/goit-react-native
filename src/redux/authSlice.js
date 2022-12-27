@@ -57,6 +57,7 @@ export const authSlice = createSlice({
 export const selectIsAuth = (store) => store.auth.isAuth;
 export const selectLogin = (store) => store.auth.login;
 export const selectEmail = (store) => store.auth.email;
+export const selectUid = (store) => store.auth.uid;
 
 const { updateUserProfile, authStateChange, authSignOut } = authSlice.actions;
 
@@ -67,14 +68,10 @@ export const authSignUpUser =
       const { user } = await db
         .auth()
         .createUserWithEmailAndPassword(email, password);
-      // const user = await db.auth().currentUser;
-
       if (user) {
         await user.updateProfile({
           displayName: login,
-          //photoURL: "https://example.com.jpg",
         });
-
         const userUpdateProfile = {
           uid: user.uid,
           login: user.displayName,
