@@ -9,7 +9,7 @@ import {
   FlatList,
 } from "react-native";
 import { useSelector } from "react-redux";
-import { selectLogin } from "../src/redux/authSlice";
+import { selectLogin } from "../src/redux/selectors";
 // import { Feather } from "@expo/vector-icons";
 import db from "../src/firebase/config";
 

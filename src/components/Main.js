@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
-import { authStateChangeUser, selectIsAuth } from "../src/redux/authSlice";
-import useRoute from "../router";
+import { authStateChangeUser } from "../redux/authSlice";
+import { selectIsAuth } from "../redux/selectors";
+import useRoute from "../../router";
 
 const Main = () => {
   const isAuth = useSelector(selectIsAuth);

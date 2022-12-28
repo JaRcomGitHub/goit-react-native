@@ -54,10 +54,6 @@ export const authSlice = createSlice({
 });
 
 // export const { logIn, regIn, logOut } = authSlice.actions;
-export const selectIsAuth = (store) => store.auth.isAuth;
-export const selectLogin = (store) => store.auth.login;
-export const selectEmail = (store) => store.auth.email;
-export const selectUid = (store) => store.auth.uid;
 
 const { updateUserProfile, authStateChange, authSignOut } = authSlice.actions;
 

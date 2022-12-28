@@ -9,12 +9,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import {
-  selectEmail,
-  selectLogin,
-  selectUid,
-  authSignOutUser,
-} from "../src/redux/authSlice";
+import { selectEmail, selectLogin, selectUid } from "../src/redux/selectors";
+import { authSignOutUser } from "../src/redux/authSlice";
 // import { AntDesign } from "@expo/vector-icons";
 import db from "../src/firebase/config";
 
@@ -89,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 60,
+    marginTop: 70,
     marginBottom: 90,
   },
   btnContainer: {
